@@ -1,0 +1,83 @@
+
+canyonbunny.pack.png
+size: 512,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bunny_head
+  rotate: false
+  xy: 2, 30
+  size: 73, 32
+  orig: 73, 32
+  offset: 0, 0
+  index: -1
+cloud01
+  rotate: false
+  xy: 2, 3
+  size: 72, 25
+  orig: 72, 25
+  offset: 0, 0
+  index: -1
+cloud02
+  rotate: false
+  xy: 77, 37
+  size: 72, 25
+  orig: 72, 25
+  offset: 0, 0
+  index: -1
+cloud03
+  rotate: false
+  xy: 151, 37
+  size: 72, 25
+  orig: 72, 25
+  offset: 0, 0
+  index: -1
+item_feather
+  rotate: false
+  xy: 102, 19
+  size: 21, 16
+  orig: 21, 16
+  offset: 0, 0
+  index: -1
+item_gold_coin
+  rotate: false
+  xy: 77, 18
+  size: 23, 17
+  orig: 23, 17
+  offset: 0, 0
+  index: -1
+mountain_left
+  rotate: false
+  xy: 225, 37
+  size: 72, 25
+  orig: 72, 25
+  offset: 0, 0
+  index: -1
+mountain_right
+  rotate: false
+  xy: 299, 37
+  size: 72, 25
+  orig: 72, 25
+  offset: 0, 0
+  index: -1
+rock_edge
+  rotate: false
+  xy: 447, 2
+  size: 23, 60
+  orig: 23, 60
+  offset: 0, 0
+  index: -1
+rock_middle
+  rotate: false
+  xy: 472, 2
+  size: 23, 60
+  orig: 23, 60
+  offset: 0, 0
+  index: -1
+water_overlay
+  rotate: false
+  xy: 373, 37
+  size: 72, 25
+  orig: 72, 25
+  offset: 0, 0
+  index: -1
