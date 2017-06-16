@@ -23,6 +23,7 @@ public class DesktopLauncher {
 			//(source folder that contains our image files, destination folder where the texture atlas should be created,
 			// name of the description file that is needed to load and use the texture atlas)
 			TexturePacker.process(settings, "assets-raw", "images", "canyonbunny.pack");
+			TexturePacker.process(settings, "assets-raw-ui", "images", "canyonbunny-ui.pack");
 		}
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();

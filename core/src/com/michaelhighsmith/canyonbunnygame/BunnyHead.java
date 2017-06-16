@@ -1,5 +1,7 @@
 package com.michaelhighsmith.canyonbunnygame;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -52,6 +54,9 @@ public class BunnyHead extends AbstractGameObject {
         //Power ups
         hasFeatherPowerup = false;
         timeLeftFeatherPowerup = 0;
+
+        //Particles
+        dustParticles.load(Gdx.files.internal("particles/dust.pfx"), Gdx.files.internal("particles"));
     }
 
     public void setJumping(boolean jumpKeyPressed){
@@ -101,6 +106,7 @@ public class BunnyHead extends AbstractGameObject {
                 setFeatherPowerup(false);
             }
         }
+        dustParticles.update(deltaTime);
     }
 
     @Override
@@ -108,6 +114,10 @@ public class BunnyHead extends AbstractGameObject {
         switch (jumpState){
             case GROUNDED:
                 jumpState = JUMP_STATE.FALLING;
+                if(velocity.x != 0){
+                    dustParticles.setPosition(position.x + dimension.x / 2, position.y);
+                    dustParticles.start();
+                }
                 break;
             case JUMP_RISING:
                 //Keep track of jump time
@@ -130,12 +140,19 @@ public class BunnyHead extends AbstractGameObject {
                 }
         }
         if (jumpState != JUMP_STATE.GROUNDED)
+            dustParticles.allowCompletion();
             super.updateMotionY(deltaTime);
     }
 
     @Override
     public void render (SpriteBatch batch){
         TextureRegion reg = null;
+
+        //Draw Particles
+        dustParticles.draw(batch);
+
+        //Apply Skin Color
+        batch.setColor(CharacterSkin.values()[GamePreferences.instance.charSkin].getColor());
 
         //Set special color when game object has a feather power-up
         if(hasFeatherPowerup){
@@ -149,4 +166,6 @@ public class BunnyHead extends AbstractGameObject {
         //Reset color to white
         batch.setColor(1,1,1,1);
     }
+
+    public ParticleEffect dustParticles = new ParticleEffect();
 }

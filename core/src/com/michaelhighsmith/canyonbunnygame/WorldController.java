@@ -3,6 +3,7 @@ package com.michaelhighsmith.canyonbunnygame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 
 import static com.badlogic.gdx.Application.ApplicationType;
@@ -23,9 +24,16 @@ public class WorldController extends InputAdapter {
 
     private float timeLeftGameOverDelay;
 
+    public float livesVisual;
+    public float scoreVisual;
+
+    private DirectedGame game;
+
     //Rectangles for collision detection
     private Rectangle r1 = new Rectangle();
     private Rectangle r2 = new Rectangle();
+
+
 
     private void onCollisionBunnyHeadWithRock(Rock rock){
         BunnyHead bunnyHead = level.bunnyHead;
@@ -97,13 +105,15 @@ public class WorldController extends InputAdapter {
 
     private void initLevel(){
         score = 0;
+        scoreVisual = score;
         level = new Level(Constants.LEVEL_01);
         cameraHelper.setTarget(level.bunnyHead);
     }
 
     public CameraHelper cameraHelper;
 
-    public WorldController(){
+    public WorldController(DirectedGame game){
+        this.game = game;
         init();
     }
 
@@ -111,9 +121,9 @@ public class WorldController extends InputAdapter {
     //without having to completely rebuild them (improves performance)
     private void init() {
         //make the worldController also serve as an instance of InputProcessor (can receive input events)
-        Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
         lives = Constants.LIVES_START;
+        livesVisual = lives;
         timeLeftGameOverDelay = 0;
         initLevel();
     }
@@ -143,7 +153,7 @@ public class WorldController extends InputAdapter {
         if(isGameOver()){
             timeLeftGameOverDelay -= deltaTime;
             if(timeLeftGameOverDelay < 0)
-                init();
+                backToMenu();
         } else {
             handleInputGame(deltaTime);
         }
@@ -157,6 +167,12 @@ public class WorldController extends InputAdapter {
             else
                 initLevel();
         }
+        level.mountains.updateScrollPosition(cameraHelper.getPosition());
+        if(livesVisual > lives)
+            livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);  //This slowly drops livesVisual down to the current # of lives when a life is lost (allows for animation to be played)
+
+        if(scoreVisual < score)
+            scoreVisual = Math.min(score, scoreVisual + 250 * deltaTime);
     }
 
 
@@ -219,6 +235,11 @@ public class WorldController extends InputAdapter {
             Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
         }
 
+        //Back to Menu
+        else if(keycode == Keys.ESCAPE || keycode == Keys.BACK){
+            backToMenu();
+        }
+
         return false;
     }
 
@@ -254,6 +275,12 @@ public class WorldController extends InputAdapter {
 
     public boolean isPlayerInWater(){
         return level.bunnyHead.position.y < -5;
+    }
+
+    private void backToMenu(){
+        //switch to menu screen
+        ScreenTransition transition = ScreenTransitionSlide.init(0.75f, ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
+        game.setScreen(new MenuScreen(game), transition);
     }
 
 }
